@@ -1,5 +1,5 @@
-env = $1
-action = $2
+env=$1
+action=$2
 if [ -z "$env" ]; then
   echo "Input env (dev/qa/state/prod) missing"
   exit 1
