@@ -3,13 +3,14 @@ resource "aws_instance" "instance" {
   instance_type          = var.instance_type
   vpc_security_group_ids = [data.aws_security_group.selected.id]
 
-  tags                   = {
-    Name                 = var.component
+  tags = {
+    Name = var.component
   }
 }
 
 resource "null_resource" "ansible" {
   provisioner "remote-exec" {
+
     connection {
       type     = "ssh"
       user     = var.ssh_user
@@ -19,7 +20,7 @@ resource "null_resource" "ansible" {
 
     inline = [
       "sudo pip3.11 install ansible",
-      "ansible-pull -i localhost, -U https://github.com/chinnak7416/expense-ansible.git,expense.yml -e env=${var.env} -e roll_name=${var.component}"
+      "ansible-pull -i localhost, -U https://github.com/chinnak7416/expense-ansible.git,expense.yml -e env=${var.env} -e role_name=${var.component}"
 
     ]
   }
