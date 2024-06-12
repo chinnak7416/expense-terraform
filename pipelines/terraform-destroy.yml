@@ -6,7 +6,7 @@ pipelines:
     #    lock_behavior: none
     #    display_order: -1
     materials:
-      git-737bd8d:
+      git-5635925:
         git: https://github.com/chinnak7416/expense-terraform.git
         shallow_clone: false
         auto_update: true
