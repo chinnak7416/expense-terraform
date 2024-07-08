@@ -3,7 +3,7 @@ pipelines:
   expense-tf-destroy:
     group: Terraform
     materials:
-      git-5635925:
+      git-f14e4aa:
         git: https://github.com/chinnak7416/expense-terraform.git
         shallow_clone: false
         auto_update: true
