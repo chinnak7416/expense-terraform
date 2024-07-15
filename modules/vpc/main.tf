@@ -51,12 +51,12 @@ resource "aws_subnet" "backend" {
 }
 
 resource "aws_subnet" "db" {
-  count = length(var.frontend_subnets)
+  count = length(var.db_subnets)
   vpc_id     = aws_vpc.main.id
-  cidr_block = var.frontend_subnets[count.index]
+  cidr_block = var.db_subnets[count.index]
   availability_zone = var.availability_zones[count.index]
 
   tags = {
-    Name = "${var.env}-frontend-subnet-${count.index+1}"
+    Name = "${var.env}-db-subnet-${count.index+1}"
   }
 }
