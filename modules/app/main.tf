@@ -36,25 +36,28 @@ resource "aws_instance" "instance" {
   }
 }
 
-#resource "null_resource" "ansible" {
-#  provisioner "remote-exec" {
-#
-#    connection {
-#      type     = "ssh"
-#      user     = jsondecode(data.vault_generic_secret.ssh.data_json).ansible_user
-#      password = jsondecode(data.vault_generic_secret.ssh.data_json).ansible_password
-#      host     = aws_instance.instance.public_ip
-#    }
-#
-#    inline = [
-#      "sudo pip3.11 install ansible hvac",
-#      "ansible-pull -i localhost, -U https://github.com/chinnak7416/expense-ansible get-secrets.yml -e env=${var.env} -e role_name=${var.component} -e vault_token=${var.vault_token}",
-#      "ansible-pull -i localhost, -U https://github.com/chinnak7416/expense-ansible expense.yml -e env=${var.env} -e role_name=${var.component} -e @secrets.json -e @app.json",
-#      "rm -rf @~/secrets.json @~/app.json"
-#
-#    ]
-#  }
-#}
+resource "null_resource" "ansible" {
+  connection {
+    type     = "ssh"
+    user     = jsondecode(data.vault_generic_secret.ssh.data_json).ansible_user
+    password = jsondecode(data.vault_generic_secret.ssh.data_json).ansible_password
+    host     = aws_instance.instance.public_ip
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "rm -rf @~/secrets.json @~/app.json",
+      "sudo pip3.11 install ansible hvac",
+      "ansible-pull -i localhost, -U https://github.com/chinnak7416/expense-ansible get-secrets.yml -e env=${var.env} -e role_name=${var.component} -e vault_token=${var.vault_token}",
+      "ansible-pull -i localhost, -U https://github.com/chinnak7416/expense-ansible expense.yml -e env=${var.env} -e role_name=${var.component} -e @secrets.json -e @app.json",
+      "rm -rf @~/secrets.json @~/app.json"
+    ]
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "rm -rf @~/secrets.json @~/app.json"
+    ]
+  }
+}
 
 resource "aws_route53_record" "record" {
   zone_id = var.zone_id
