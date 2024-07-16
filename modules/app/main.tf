@@ -49,7 +49,6 @@ resource "null_resource" "ansible" {
       "sudo pip3.11 install ansible hvac",
       "ansible-pull -i localhost, -U https://github.com/chinnak7416/expense-ansible get-secrets.yml -e env=${var.env} -e role_name=${var.component} -e vault_token=${var.vault_token}",
       "ansible-pull -i localhost, -U https://github.com/chinnak7416/expense-ansible expense.yml -e env=${var.env} -e role_name=${var.component} -e @secrets.json -e @app.json",
-      "rm -rf @~/secrets.json @~/app.json"
     ]
   }
   provisioner "remote-exec" {
