@@ -11,3 +11,5 @@ variable "backend_subnets" {}
 variable "db_subnets" {}
 variable "public_subnets" {}
 variable "availability_zones" {}
+variable "bastion_nodes" {}
+variable "prometheus_nodes" {}

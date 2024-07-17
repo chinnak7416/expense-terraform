@@ -4,10 +4,22 @@ resource "aws_security_group" "main" {
   vpc_id      = var.vpc_id
 
   ingress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
+    from_port        = var.app_port
+    to_port          = var.app_port
+    protocol         = "TCP"
+    cidr_blocks      = var.server_app_port_sg_cidr
+  }
+  ingress {
+    from_port        = 22
+    to_port          = 22
+    protocol         = "TCP"
+    cidr_blocks      = var.bastion_nodes
+  }
+  ingress {
+    from_port        = 9100
+    to_port          = 9100
+    protocol         = "TCP"
+    cidr_blocks      = var.prometheus_nodes
   }
 
   egress {
@@ -81,12 +93,36 @@ resource "aws_route53_record" "load_balancer" {
   records = [aws_lb.main[0].dns_name]
 }
 
+resource "aws_security_group" "load_balancer" {
+  count              = var.lb_needed ? 1 : 0
+  name        = "${var.component}-${var.env}-lb-sg"
+  description = "${var.component}-${var.env}-lb-sg"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    from_port        = var.app_port
+    to_port          = var.app_port
+    protocol         = "TCP"
+    cidr_blocks      = var.lb_app_port_sg_cidr
+  }
+
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name = "${var.component}-${var.env}-lb-sg"
+  }
+}
+
 resource "aws_lb" "main" {
   count              = var.lb_needed ? 1 : 0
   name               = "${var.env}-${var.component}-alb"
   internal           = var.lb_type == "public" ? false : true
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.main.id]
+  security_groups    = [aws_security_group.load_balancer[0].id]
   subnets            = var.lb_subnets
 
   tags = {
