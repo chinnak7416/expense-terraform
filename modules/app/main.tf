@@ -36,7 +36,8 @@ resource "aws_instance" "instance" {
   }
   lifecycle {
     ignore_changes = [
-    ami,]
+    ami,
+    ]
   }
 }
 
@@ -63,11 +64,21 @@ resource "null_resource" "ansible" {
 }
 
 resource "aws_route53_record" "record" {
+  count   = var.lb_needed ? 0 : 1
   zone_id = var.zone_id
   name    = "${var.component}-${var.env}"
   type    = "A"
   ttl     = 30
   records = [aws_instance.instance.private_ip]
+}
+
+resource "aws_route53_record" "load_balancer" {
+  count   = var.lb_needed ? 1 : 0
+  zone_id = var.zone_id
+  name    = "${var.component}-${var.env}"
+  type    = "CNAME"
+  ttl     = 30
+  records = [aws_lb.main[0].dns_name]
 }
 
 resource "aws_lb" "main" {
@@ -89,6 +100,16 @@ resource "aws_lb_target_group" "main" {
   port     = var.app_port
   protocol = "HTTP"
   vpc_id   = var.vpc_id
+  deregistration_delay = 15
+
+  health_check {
+    healthy_threshold   = 2
+    interval            = 5
+    path                = "/health"
+    port                = var.app_port
+    timeout             = 2
+    unhealthy_threshold = 2
+  }
 
 }
 
