@@ -34,6 +34,10 @@ resource "aws_instance" "instance" {
     env     = var.env
 
   }
+  lifecycle {
+    ignore_changes = [
+    ami,]
+  }
 }
 
 resource "null_resource" "ansible" {
@@ -99,7 +103,7 @@ resource "aws_lb_listener" "main" {
   count              = var.lb_needed ? 1 : 0
   load_balancer_arn = aws_lb.main[0].arn
   port              = var.app_port
-  protocol          = "HTTPS"
+  protocol          = "HTTP"
 
   default_action {
     type             = "forward"
