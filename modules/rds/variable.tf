@@ -1,0 +1,12 @@
+variable "component" {}
+variable "env" {}
+variable "engine" {}
+variable "engine_version" {}
+variable "allocated_storage" {}
+variable "storage_type" {}
+variable "skip_final_snapshot" {}
+variable "instance_class" {}
+variable "family" {}
+variable "subnet_ids" {}
+variable "vpc_id" {}
+variable "server_app_port_sg_cidr" {}
