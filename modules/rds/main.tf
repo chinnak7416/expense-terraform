@@ -14,7 +14,9 @@ resource "aws_db_instance" "main" {
   publiciy_accessible  = false
   db_subnet_group_name = aws_db_subnet_group.default.name
 
-}resource "aws_db_parameter_group" "main" {
+}
+
+resource "aws_db_parameter_group" "main" {
   name   = "${var.component}-${var.env}-pg"
   family = var.family
 }
