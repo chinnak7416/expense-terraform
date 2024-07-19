@@ -59,6 +59,8 @@ module "rds" {
   subnet_ids           = module.vpc.db_subnets
   vpc_id               = module.vpc.vpc_id
   server_app_port_sg_cidr = var.backend_subnets
+  kms_key_id              = var.kms_key_id
+
 }
 
 
