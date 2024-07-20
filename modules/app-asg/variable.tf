@@ -10,3 +10,9 @@ variable "max_capacity" {}
 variable "min_capacity" {}
 variable "subnets" {}
 variable "vault_token" {}
+variable "zone_id" {}
+variable "lb_subnets" {}
+variable "lb_type" {}
+variable "lb_ports" {}
+variable "lb_app_port_sg_cidr" {}
+variable "certificate_arn" {}
