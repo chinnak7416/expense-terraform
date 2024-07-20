@@ -1,0 +1,12 @@
+variable "component" {}
+variable "env" {}
+variable "vpc_id" {}
+variable "app_port" {}
+variable "bastion_nodes" {}
+variable "prometheus_nodes" {}
+variable "server_app_port_sg_cidr" {}
+variable "instance_type" {}
+variable "max_capacity" {}
+variable "min_capacity" {}
+variable "subnets" {}
+variable "vault_token" {}
