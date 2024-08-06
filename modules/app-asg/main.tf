@@ -78,6 +78,12 @@ resource "aws_autoscaling_group" "main" {
     propagate_at_launch = true
     value               = "yes"
   }
+
+  tag {
+    key                 = "env"
+    propagate_at_launch = true
+    value               = "var.env"
+  }
 }
 
 resource "aws_lb_target_group" "main" {
