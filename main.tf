@@ -105,3 +105,9 @@ module "vpc" {
 
 
 }
+module "eks" {
+  source     = "./modules/eks"
+  env        = var.env
+  kms_key_id = var.kms_key_id
+  subnet_ids = module.vpc.backend_subnets
+}
