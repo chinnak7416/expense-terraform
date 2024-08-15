@@ -16,3 +16,4 @@ variable "lb_type" {}
 variable "lb_ports" {}
 variable "lb_app_port_sg_cidr" {}
 variable "certificate_arn" {}
+variable "kms_key_id" {}
