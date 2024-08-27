@@ -61,6 +61,7 @@ resource "aws_eks_node_group" "main" {
   }
 }
 
+
 resource "null_resource" "aws-auth" {
 
   depends_on = [aws_eks_node_group.main]
